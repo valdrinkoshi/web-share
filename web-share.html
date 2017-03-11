@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`web-share`
+Wraps the web share api with a fallback to sharing on twitter
+
+@demo demo/index.html
+-->
+
+<dom-module id="web-share">
+  <template>
+
+  </template>
+
+  <script>
+    class WebShare extends Polymer.Element {
+      static get is() { return 'web-share'; }
+
+      static get properties() {
+        return {
+          share: {
+            type: Boolean,
+            value: false,
+            observer: 'shareChanged'
+          },
+          title: String,
+          url: {
+            type: String,
+            value: window.location.href
+          },
+          text: String
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        if (navigator.share === undefined) {
+          this.webShareSupported = false;
+        } else {
+          this.webShareSupported = true;
+        }
+      }
+
+      shareChanged(newValue, oldValue) {
+        if (newValue === true) {
+
+          if (this.webShareSupported === true) {
+            navigator.share({
+              title: this.title,
+              text: this.text,
+              url: this.url
+            }).then(() => console.log('Successful share'))
+              .catch(error => console.log('Error sharing:', error));
+          } else {
+            window.open(`https://twitter.com/share?text=${this.text}&url=${this.url}`)
+          }
+          
+        }
+      }
+    }
+
+    window.customElements.define(WebShare.is, WebShare);
+  </script>
+</dom-module>
