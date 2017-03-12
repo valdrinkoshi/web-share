@@ -3,6 +3,9 @@
 Wraps the [web share api](https://developers.google.com/web/updates/2016/10/navigator-share) with a fallback to sharing on twitter.
 
 ### Usage
+If using NPM: `npm install web-share --save`
+If using Bower: `bower install jgw96/web-share --save`
+
 Basic usage will look like this:
 
 ```
